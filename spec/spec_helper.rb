@@ -4,6 +4,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'active_support'
 require 'active_support/hash_with_indifferent_access'
 require 'action_view'
+require 'tilt'
 
 require 'ox/builder'
 
