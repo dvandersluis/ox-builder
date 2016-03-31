@@ -44,6 +44,7 @@ module Ox
       def to_s
         Ox.dump(node)
       end
+      alias_method :to_xml, :to_s
 
       def inspect
         "#<#{self.class.name}:0x#{"%x" % object_id} node=#{node}>"
