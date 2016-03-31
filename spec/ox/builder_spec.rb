@@ -3,10 +3,8 @@ require 'spec_helper'
 Shape = Struct.new(:type, :width, :height, :color)
 
 describe Ox::Builder do
-  before { @shapes = [ Shape.new(:rectangle, 30, 15), Shape.new(:square, 20, 20, '#CCCCCC') ] }
-
   it 'should build a simple document' do
-    doc = Ox::Builder.build do
+    doc = generate do
       instruct!
       tag! :name, cdata!('John'), for: 'creator'
       tag! :data do
@@ -14,11 +12,11 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(load_xml(:simple))
+    expect(doc).to eq(load_xml(:simple))
   end
 
   it 'should build a simple document using a block param' do
-    doc = Ox::Builder.build do |xml|
+    doc = generate do |xml|
       xml.instruct!
       xml.tag! :name, xml.cdata!('John'), for: 'creator'
       xml.tag! :data do |xml|
@@ -26,11 +24,13 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(load_xml(:simple))
+    expect(doc).to eq(load_xml(:simple))
   end
 
   it 'should build a complex document' do
-    doc = Ox::Builder.build do |xml|
+    @shapes = [ Shape.new(:rectangle, 30, 15), Shape.new(:square, 20, 20, '#CCCCCC') ]
+
+    doc = generate do |xml|
       xml.instruct!
       xml.data do |xml|
         xml.provider xml.cdata!('Data-Provider')
@@ -49,18 +49,20 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(load_xml(:complex))
+    expect(doc).to eq(load_xml(:complex))
   end
 
   it 'should build a complex document without block params' do
-    doc = Ox::Builder.build do
+    shapes = [ Shape.new(:rectangle, 30, 15), Shape.new(:square, 20, 20, '#CCCCCC') ]
+
+    doc = generate do
       instruct!
       data do
         provider cdata!('Data-Provider')
         provided_at Date.new(2016, 4, 10).strftime('%a, %e %b %Y %H:%M:%S GMT')
 
         shapes do
-          @shapes.each do |s|
+          shapes.each do |s|
             shape do
               type cdata!(s.type)
               width s.width
@@ -72,62 +74,22 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(load_xml(:complex))
+    expect(doc).to eq(load_xml(:complex))
   end
 
-  it 'should allow tag names to be specified with a ! if they would otherwise conflict' do
-    def name
-      'John Smith'
+  it 'should build nested XML using tag!' do
+    doc = generate do
+      tag! :person do
+        tag! :first_name, 'John'
+        tag! :last_name, 'Smith'
+
+        tag! :address do
+          tag! :country, 'Canada'
+          tag! :state, 'Ontario'
+        end
+      end
     end
 
-    doc = Ox::Builder.build do
-      name! name
-    end
-
-    expect(doc.to_s.strip).to eq('<name>John Smith</name>')
-  end
-
-  it 'should allow tags to be created dynamically' do
-    def get_name
-      :quux
-    end
-
-    doc = Ox::Builder.build do
-      foobarbaz get_name
-    end
-
-    expect(doc.to_s.strip).to eq('<foobarbaz>quux</foobarbaz>')
-  end
-
-  it 'should allow comments to be created' do
-    doc = Ox::Builder.build do
-      comment! 'this is my comment'
-    end
-
-    expect(doc.to_s.strip).to eq('<!-- this is my comment -->')
-  end
-
-  it 'should allow doctypes to be created' do
-    doc = Ox::Builder.build do
-      doctype! :html
-    end
-
-    expect(doc.to_s.strip).to eq('<!DOCTYPE html >')
-  end
-
-  it 'should allow the instruct! attributes to be changed' do
-    doc = Ox::Builder.build do
-      instruct! version: 2.0
-    end
-
-    expect(doc.to_s.strip).to eq('<?xml version="2.0"?>')
-  end
-
-  it 'should allow the instruct! command to specify a different name' do
-    doc = Ox::Builder.build do
-      instruct! 'xml-stylesheet', type: 'text/xsl', href: 'style.xsl'
-    end
-
-    expect(doc.to_s.strip).to eq('<?xml-stylesheet type="text/xsl" href="style.xsl"?>')
+    expect(doc).to eq(load_xml('person'))
   end
 end

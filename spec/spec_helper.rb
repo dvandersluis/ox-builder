@@ -11,3 +11,7 @@ require 'ox/builder'
 def load_xml(filename)
   File.read("spec/support/#{filename}.out.xml")
 end
+
+def generate(&block)
+  Ox::Builder.build(&block).to_s
+end
