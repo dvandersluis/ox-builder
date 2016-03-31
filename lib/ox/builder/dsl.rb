@@ -7,8 +7,11 @@ module Ox
         @node = node
       end
 
-      def instruct!(attributes = { version: '1.0', encoding: 'UTF-8' })
-        with_dsl(Ox::Instruct.new(:xml)) do |instruct|
+      def instruct!(*args)
+        attributes = args.last.is_a?(Hash) ? args.pop : { version: '1.0', encoding: 'UTF-8' }
+        name = args.first || :xml
+
+        with_dsl(Ox::Instruct.new(name)) do |instruct|
           instruct.add_attributes(attributes)
           node << instruct.node
         end

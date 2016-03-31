@@ -92,7 +92,7 @@ describe Ox::Builder do
       :quux
     end
 
-    doc = Ox::Builder.build do |xml|
+    doc = Ox::Builder.build do
       foobarbaz get_name
     end
 
@@ -100,7 +100,7 @@ describe Ox::Builder do
   end
 
   it 'should allow comments to be created' do
-    doc = Ox::Builder.build do |xml|
+    doc = Ox::Builder.build do
       comment! 'this is my comment'
     end
 
@@ -108,10 +108,26 @@ describe Ox::Builder do
   end
 
   it 'should allow doctypes to be created' do
-    doc = Ox::Builder.build do |xml|
+    doc = Ox::Builder.build do
       doctype! :html
     end
 
     expect(doc.to_s.strip).to eq('<!DOCTYPE html >')
+  end
+
+  it 'should allow the instruct! attributes to be changed' do
+    doc = Ox::Builder.build do
+      instruct! version: 2.0
+    end
+
+    expect(doc.to_s.strip).to eq('<?xml version="2.0"?>')
+  end
+
+  it 'should allow the instruct! command to specify a different name' do
+    doc = Ox::Builder.build do
+      instruct! 'xml-stylesheet', type: 'text/xsl', href: 'style.xsl'
+    end
+
+    expect(doc.to_s.strip).to eq('<?xml-stylesheet type="text/xsl" href="style.xsl"?>')
   end
 end
