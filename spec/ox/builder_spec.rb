@@ -1,47 +1,5 @@
 require 'spec_helper'
 
-SIMPLE_XML = <<-xml
-<?xml version="1.0" encoding="UTF-8"?>
-<name for="creator">
-  <![CDATA[John]]>
-</name>
-<data>
-  <foo>bar</foo>
-</data>
-xml
-
-XML = <<-xml
-<?xml version="1.0" encoding="UTF-8"?>
-<data>
-  <provider>
-    <![CDATA[Data-Provider]]>
-  </provider>
-  <provided_at>Sun, 10 Apr 2016 00:00:00 GMT</provided_at>
-  <shapes>
-    <shape>
-      <type>
-        <![CDATA[rectangle]]>
-      </type>
-      <width>30</width>
-      <height>15</height>
-      <color>
-        <![CDATA[]]>
-      </color>
-    </shape>
-    <shape>
-      <type>
-        <![CDATA[square]]>
-      </type>
-      <width>20</width>
-      <height>20</height>
-      <color>
-        <![CDATA[#CCCCCC]]>
-      </color>
-    </shape>
-  </shapes>
-</data>
-xml
-
 Shape = Struct.new(:type, :width, :height, :color)
 
 describe Ox::Builder do
@@ -56,7 +14,7 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(SIMPLE_XML)
+    expect(doc.to_s).to eq(load_xml(:simple))
   end
 
   it 'should build a simple document using a block param' do
@@ -68,22 +26,10 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(SIMPLE_XML)
+    expect(doc.to_s).to eq(load_xml(:simple))
   end
 
-  it 'should allow tags to be created dynamically' do
-    def get_name
-      :quux
-    end
-
-    doc = Ox::Builder.build do |xml|
-      foobarbaz get_name
-    end
-
-    expect(doc.to_s.strip).to eq('<foobarbaz>quux</foobarbaz>')
-  end
-
-  it 'should build an XML document' do
+  it 'should build a complex document' do
     doc = Ox::Builder.build do |xml|
       xml.instruct!
       xml.data do |xml|
@@ -103,10 +49,10 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(XML)
+    expect(doc.to_s).to eq(load_xml(:complex))
   end
 
-  it 'should build an XML document without block params' do
+  it 'should build a complex document without block params' do
     doc = Ox::Builder.build do
       instruct!
       data do
@@ -126,7 +72,7 @@ describe Ox::Builder do
       end
     end
 
-    expect(doc.to_s).to eq(XML)
+    expect(doc.to_s).to eq(load_xml(:complex))
   end
 
   it 'should allow tag names to be specified with a ! if they would otherwise conflict' do
@@ -139,5 +85,33 @@ describe Ox::Builder do
     end
 
     expect(doc.to_s.strip).to eq('<name>John Smith</name>')
+  end
+
+  it 'should allow tags to be created dynamically' do
+    def get_name
+      :quux
+    end
+
+    doc = Ox::Builder.build do |xml|
+      foobarbaz get_name
+    end
+
+    expect(doc.to_s.strip).to eq('<foobarbaz>quux</foobarbaz>')
+  end
+
+  it 'should allow comments to be created' do
+    doc = Ox::Builder.build do |xml|
+      comment! 'this is my comment'
+    end
+
+    expect(doc.to_s.strip).to eq('<!-- this is my comment -->')
+  end
+
+  it 'should allow doctypes to be created' do
+    doc = Ox::Builder.build do |xml|
+      doctype! :html
+    end
+
+    expect(doc.to_s.strip).to eq('<!DOCTYPE html >')
   end
 end

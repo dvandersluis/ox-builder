@@ -21,3 +21,8 @@ module Ox
     end
   end
 end
+
+if defined?(ActionView)
+  require 'ox/builder/action_view/template_handler'
+  ActionView::Template.register_template_handler :ox, Ox::Builder::ActionView::TemplateHandler.new
+end

@@ -18,6 +18,14 @@ module Ox
         Ox::CData.new(text)
       end
 
+      def comment!(text)
+        node << Ox::Comment.new(text)
+      end
+
+      def doctype!(type)
+        node << Ox::DocType.new(type)
+      end
+
       def tag!(name, *args, &block)
         builder = Builder.build(Ox::Element.new(name), &block).tap do |tag|
           attributes = args.last.is_a?(Hash) ? args.pop : {}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <provider>
+    <![CDATA[Data-Provider]]>
+  </provider>
+  <provided_at>Sun, 10 Apr 2016 00:00:00 GMT</provided_at>
+  <shapes>
+    <shape>
+      <type>
+        <![CDATA[rectangle]]>
+      </type>
+      <width>30</width>
+      <height>15</height>
+      <color>
+        <![CDATA[]]>
+      </color>
+    </shape>
+    <shape>
+      <type>
+        <![CDATA[square]]>
+      </type>
+      <width>20</width>
+      <height>20</height>
+      <color>
+        <![CDATA[#CCCCCC]]>
+      </color>
+    </shape>
+  </shapes>
+</data>
