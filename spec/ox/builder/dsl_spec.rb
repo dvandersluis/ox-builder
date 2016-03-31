@@ -64,14 +64,24 @@ describe Ox::Builder::DSL do
   end
 
   describe '#cdata!' do
-    it 'should wrap text in CDATA' do
-      doc = generate { name cdata!('John Smith') }
+    it 'should wrap text in CDATA in a tag' do
+      doc = generate { name { cdata!('John Smith') } }
       expect(doc).to eq(load_xml(:cdata))
     end
 
     it 'should not output CDATA directly' do
       doc = generate { cdata! 'John Smith' }
-      expect(doc).to eq("\n")
+      expect(doc.strip).to eq('<![CDATA[John Smith]]>')
+    end
+
+    it 'should allow a tag to have attributes and cdata at the same time' do
+      doc = generate do
+        name for: 'me' do
+          cdata!('John Smith')
+        end
+      end
+
+      expect(doc).to eq(load_xml('cdata-with-attrs'))
     end
   end
 

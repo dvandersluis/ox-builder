@@ -18,7 +18,7 @@ module Ox
       end
 
       def cdata!(text)
-        Ox::CData.new(text)
+        node << Ox::CData.new(text)
       end
 
       def comment!(text)

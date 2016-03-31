@@ -6,7 +6,7 @@ describe Ox::Builder do
   it 'should build a simple document' do
     doc = generate do
       instruct!
-      tag! :name, cdata!('John'), for: 'creator'
+      tag!(:name, for: 'creator') { cdata!('John') }
       tag! :data do
         tag! :foo, :bar
       end
@@ -18,7 +18,7 @@ describe Ox::Builder do
   it 'should build a simple document using a block param' do
     doc = generate do |xml|
       xml.instruct!
-      xml.tag! :name, xml.cdata!('John'), for: 'creator'
+      xml.tag!(:name, for: 'creator') { |xml| xml.cdata!('John') }
       xml.tag! :data do |xml|
         xml.tag! :foo, :bar
       end
@@ -33,16 +33,16 @@ describe Ox::Builder do
     doc = generate do |xml|
       xml.instruct!
       xml.data do |xml|
-        xml.provider xml.cdata!('Data-Provider')
+        xml.provider { |xml| xml.cdata!('Data-Provider') }
         xml.provided_at Date.new(2016, 4, 10).strftime('%a, %e %b %Y %H:%M:%S GMT')
 
         xml.shapes do |xml|
           @shapes.each do |shape|
             xml.shape do |xml|
-              xml.type xml.cdata!(shape.type)
+              xml.type { |xml| xml.cdata!(shape.type) }
               xml.width shape.width
               xml.height shape.height
-              xml.color xml.cdata!(shape.color)
+              xml.color { |xml| xml.cdata!(shape.color) }
             end
           end
         end
@@ -58,16 +58,16 @@ describe Ox::Builder do
     doc = generate do
       instruct!
       data do
-        provider cdata!('Data-Provider')
+        provider { cdata!('Data-Provider') }
         provided_at Date.new(2016, 4, 10).strftime('%a, %e %b %Y %H:%M:%S GMT')
 
         shapes do
           shapes.each do |s|
             shape do
-              type cdata!(s.type)
+              type { cdata!(s.type) }
               width s.width
               height s.height
-              color cdata!(s.color)
+              color { cdata!(s.color) }
             end
           end
         end
