@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Daniel Vandersluis"]
   gem.email         = ["dvandersluis@selfmgmt.com"]
 
-  gem.summary       = %q{XML Builder for Rails using ox}
+  gem.summary       = %q{DSL for easily building XML documents using ox}
   gem.homepage      = "https://www.github.com/dvandersluis/ox-builder"
   gem.license       = "MIT"
 
