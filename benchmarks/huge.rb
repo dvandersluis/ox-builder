@@ -5,8 +5,8 @@ Country = Struct.new(:code, :name, :population, :north, :south, :east, :west, :c
 data = YAML.load_file('benchmarks/data/countries.yml')['countries']['country'] * 100
 @countries = data.map{ |c| Country.new(*c.values) }
 
-builder_tilt = Tilt.new('benchmarks/templates/large.builder')
-ox_tilt = Tilt.new('benchmarks/templates/large.ox')
+builder_tilt = Tilt.new('benchmarks/templates/countries.builder')
+ox_tilt = Tilt.new('benchmarks/templates/countries.ox')
 
 # Output is 11M
 
