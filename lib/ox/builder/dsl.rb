@@ -1,12 +1,6 @@
 module Ox
   module Builder
-    class DSL
-      attr_reader :node
-
-      def initialize(node)
-        @node = node
-      end
-
+    module DSL
       def instruct!(*args)
         attributes = args.last.is_a?(Hash) ? args.pop : { version: '1.0', encoding: 'UTF-8' }
         name = args.first || :xml
@@ -42,32 +36,6 @@ module Ox
         end
 
         node << builder.node
-      end
-
-      def to_s
-        Ox.dump(node)
-      end
-      alias_method :to_xml, :to_s
-
-      def inspect
-        "#<#{self.class.name}:0x#{"%x" % object_id} node=#{node}>"
-      end
-
-      def add_attributes(attributes)
-        attributes.each do |key, val|
-          node[key] = val
-        end
-      end
-
-      def method_missing(name, *args, &block)
-        name = name[0...-1] if name.to_s.end_with?('!')
-        tag!(name, *args, &block)
-      end
-
-    protected
-
-      def with_dsl(obj, &block)
-        DSL.new(obj).tap(&block)
       end
     end
   end

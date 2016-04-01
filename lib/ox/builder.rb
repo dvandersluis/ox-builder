@@ -1,14 +1,15 @@
 require 'ox'
 require 'docile'
-require 'ox/builder/dsl'
 require 'ox/builder/version'
+require 'ox/builder/dsl'
+require 'ox/builder/factory'
 require 'ox/builder/fallback_context_proxy'
 
 module Ox
   module Builder
     class << self
       def build(node = Ox::Document.new, &block)
-        DSL.new(node).tap do |builder|
+        Factory.new(node).tap do |builder|
           dsl_eval(builder, builder, &block) if block_given?
         end
       end

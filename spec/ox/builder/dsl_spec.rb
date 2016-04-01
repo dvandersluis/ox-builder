@@ -38,12 +38,6 @@ describe Ox::Builder::DSL do
       expect(doc.strip).to eq('<person id="123">John Smith</person>')
     end
 
-    it 'allows invalid method names to be passed via send' do
-      # I don't know why anyone would ever do this but if they did it'd work
-      doc = generate { send(:'first-name', 'John') }
-      expect(doc.strip).to eq('<first-name>John</first-name>')
-    end
-
     it 'should allow tag names to be specified with a ! if they would otherwise conflict' do
       def name
         'John Smith'
@@ -60,6 +54,32 @@ describe Ox::Builder::DSL do
 
       doc = generate { foobarbaz get_name }
       expect(doc.strip).to eq('<foobarbaz>quux</foobarbaz>')
+    end
+
+    it 'should allow methods to be accessed from a subnode' do
+      def get_name
+        'John Smith'
+      end
+
+      doc = generate do
+        data do
+          name get_name
+        end
+      end
+
+      expect(doc).to eq(load_xml('method-in-subnode'))
+    end
+
+    it 'should call the correct method when the context has a method that conflicts with the DSL' do
+      def tag!(*)
+        raise
+      end
+
+      doc = generate do
+        tag! :name
+      end
+
+      expect(doc.strip).to eq('<name/>')
     end
   end
 
