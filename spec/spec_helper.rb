@@ -12,6 +12,6 @@ def load_xml(filename)
   File.read("spec/support/#{filename}.out.xml")
 end
 
-def generate(&block)
-  Ox::Builder.build(&block).to_s
+def generate(options = {}, &block)
+  Ox::Builder.build(&block).to_s(options)
 end

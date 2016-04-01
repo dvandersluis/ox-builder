@@ -92,4 +92,24 @@ describe Ox::Builder do
 
     expect(doc).to eq(load_xml('person'))
   end
+
+  it 'should accept UTF-8' do
+    doc = generate { string "Iñtërnâtiônàl" }
+    expect(doc.strip).to eq('<string>Iñtërnâtiônàl</string>')
+  end
+
+  it 'should accept UTF-8 tags' do
+    doc = generate { tag! 'Iñtërnâtiônàl' }
+    expect(doc.strip).to eq('<Iñtërnâtiônàl/>')
+  end
+
+  it 'should accept UTF-8 as a dynamic tag' do
+    doc = generate { iñtërnâtiônàl }
+    expect(doc.strip).to eq('<iñtërnâtiônàl/>')
+  end
+
+  it 'should allow another encoding to be specified' do
+    doc = generate(encoding: 'ASCII') { string "Iñtërnâtiônàl" }
+    expect(doc.encoding).to eq(Encoding::ASCII)
+  end
 end

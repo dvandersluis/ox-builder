@@ -9,8 +9,9 @@ module Ox
         @node = node
       end
 
-      def to_s
-        Ox.dump(node)
+      def to_s(options = {})
+        encoding = options.fetch(:encoding, 'UTF-8')
+        Ox.dump(node, encoding: encoding)
       end
       alias_method :to_xml, :to_s
 
