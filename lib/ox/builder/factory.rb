@@ -11,7 +11,8 @@ module Ox
 
       def to_s(options = {})
         encoding = options.fetch(:encoding, 'UTF-8')
-        Ox.dump(node, encoding: encoding)
+        indent = options.fetch(:indent, 2)
+        Ox.dump(node, encoding: encoding, indent: indent)
       end
       alias_method :to_xml, :to_s
 

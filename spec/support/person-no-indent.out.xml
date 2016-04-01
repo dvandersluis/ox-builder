@@ -1,0 +1,9 @@
+
+<person>
+<first_name>John</first_name>
+<last_name>Smith</last_name>
+<address>
+<country>Canada</country>
+<state>Ontario</state>
+</address>
+</person>

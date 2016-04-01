@@ -112,4 +112,20 @@ describe Ox::Builder do
     doc = generate(encoding: 'ASCII') { string "Iñtërnâtiônàl" }
     expect(doc.encoding).to eq(Encoding::ASCII)
   end
+
+  it 'should allow the indentation to be specified' do
+    doc = generate(indent: 0) do
+      person do
+        first_name 'John'
+        last_name 'Smith'
+
+        address do
+          country 'Canada'
+          state 'Ontario'
+        end
+      end
+    end
+
+    expect(doc).to eq(load_xml('person-no-indent'))
+  end
 end
