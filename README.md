@@ -1,5 +1,6 @@
 # Ox::Builder
 
+[![Gem Version](https://badge.fury.io/rb/ox-builder.svg)](https://badge.fury.io/rb/ox-builder)
 [![Build Status](https://travis-ci.org/dvandersluis/ox-builder.svg?branch=master)](https://travis-ci.org/dvandersluis/ox-builder)
 
 Ox::Builder provides a DSL for quickly building XML documents using the [`ox`](https://github.com/ohler55/ox) gem.
