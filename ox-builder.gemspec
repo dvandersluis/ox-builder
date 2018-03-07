@@ -27,6 +27,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'benchmark-ips'
   gem.add_development_dependency 'builder'
 
-  gem.add_dependency 'ox', ['~> 2.3.0']
-  gem.add_dependency 'docile', ['~> 1.1.5']
+  gem.add_dependency 'ox', ['>= 2.3.0']
+  gem.add_dependency 'docile', ['>= 1.1.5']
 end
